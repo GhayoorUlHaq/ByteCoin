@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, CoinManagerDelegate {
+class ViewController: UIViewController {
 
     @IBOutlet weak var bitCoinLabel: UILabel!
     @IBOutlet weak var currencyLabel: UILabel!
@@ -22,22 +22,7 @@ class ViewController: UIViewController, CoinManagerDelegate {
         currencyPicker.delegate = self
         currencyPicker.dataSource = self
         coinManager.delegate = self
-//        currencyPicker.dataSource = UIPickerViewDataSource
     }
-    
-    func didCoinUpdate(_ coinManager: CoinManager, currency: String) {
-        DispatchQueue.main.async {
-            self.bitCoinLabel.text = currency
-        }
-        
-    }
-
-    func didFailWithError(error: Error) {
-        DispatchQueue.main.async {
-                   self.bitCoinLabel.text = "Error loading rates for "
-               }
-    }
-    
 }
 
  //MARK: - UIPickerDelegateMethods
@@ -65,6 +50,22 @@ extension ViewController: UIPickerViewDataSource, UIPickerViewDelegate {
     // return return rows in components
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return coinManager.currencyArray.count
+    }
+}
+
+//MARK: - CoinManagerDelegate
+extension ViewController: CoinManagerDelegate {
+    func didCoinUpdate(_ coinManager: CoinManager, currency: String) {
+        DispatchQueue.main.async {
+            self.bitCoinLabel.text = currency
+        }
+        
+    }
+
+    func didFailWithError(error: Error) {
+        DispatchQueue.main.async {
+                   self.bitCoinLabel.text = "Error loading rates for "
+               }
     }
 }
 
